@@ -15,12 +15,12 @@ public class Main {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
-                    ******* Bienvenido a nuestro buscador de series *******
-                    1 - Adicionar serie
-                    2 - Adicionar episodios
-                    3 - Mostrar lista de Series en la BD
-                    4 - Buscar series por titulo
-                    5 - Buscar series por categoría
+                    ******* Bienvenido a nuestro buscador de libros *******
+                    1 - Adicionar libros
+                    2 - Mostrar libros en la BD
+                    3 - Mostrar autores en la BD
+                    4 - Mostrar autores vivos en un determinado año
+                    5 - Mostrar libros por idioma
                                  \s
                     0 - Salir
                     *******************************************************
@@ -36,7 +36,7 @@ public class Main {
                 case 4: mostrarAutoresVivos(); break;
                 case 5: mostrarLibrosPorIdioma(); break;
                 case 0:
-                    System.out.println("Cerrando la aplicación...");
+                    System.out.println("Cerrando la aplicación. ¡Gracias por usar!");
                     break;
                 default:
                     System.out.println("Opción inválida. Por favor, intenta nuevamente.");
