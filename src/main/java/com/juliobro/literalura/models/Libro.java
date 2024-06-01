@@ -26,6 +26,16 @@ public class Libro {
         this.descargas = l.descargas();
     }
 
+    @Override
+    public String toString() {
+        return "**************** LIBRO ****************" +
+                "\nTitulo: '" + titulo + '\'' +
+                "\nAutor: " + autor.getNombre() +
+                "\nIdioma: " + idioma +
+                "\nNúmero de descargas: " + descargas +
+                "\n***************************************\n";
+    }
+
     /* ---------------------------- Getters & Setters Zone ---------------------------- */
 
 

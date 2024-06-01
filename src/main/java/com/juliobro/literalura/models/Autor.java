@@ -3,6 +3,7 @@ package com.juliobro.literalura.models;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "autores")
@@ -24,6 +25,18 @@ public class Autor {
         this.nombre = a.nombre();
         this.fechaNacimiento = a.fechaNacimiento();
         this.fechaMuerte = a.fechaMuerte();
+    }
+
+    @Override
+    public String toString() {
+        return "**************** AUTOR ****************" +
+                "\nNombre: " + nombre +
+                "\nNacimiento: " + fechaNacimiento +
+                "\nMuerte: " + fechaMuerte +
+                "\nLibros en la BD: " + libros.stream()
+                .map(l -> "'"+l.getTitulo()+"'")
+                .collect(Collectors.joining(", ")) +
+                "\n***************************************\n";
     }
 
     /* ---------------------------- Getters & Setters Zone ---------------------------- */

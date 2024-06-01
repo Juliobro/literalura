@@ -25,38 +25,19 @@ public class Main {
 
     public void ejecutarMenu() {
         var opcion = -1;
+        mensajeBienvenida();
+        
         while (opcion != 0) {
-            var menu = """
-                     ******* Bienvenido a nuestro buscador de libros *******
-                     1 - Adicionar libros
-                     2 - Mostrar libros en la BD
-                     3 - Mostrar autores en la BD
-                     4 - Mostrar autores vivos en un determinado año
-                     5 - Mostrar libros por idioma
-                                  \s
-                     0 - Salir
-                     *******************************************************
-                    \s""";
-            System.out.println(menu);
+            menuSeleccion();
             opcion = sc.nextInt();
             sc.nextLine();
 
             switch (opcion) {
-                case 1:
-                    adicionarLibro();
-                    break;
-                case 2:
-                    mostrarLibros();
-                    break;
-                case 3:
-                    mostrarAutores();
-                    break;
-                case 4:
-                    mostrarAutoresVivos();
-                    break;
-                case 5:
-                    mostrarLibrosPorIdioma();
-                    break;
+                case 1: adicionarLibro(); break;
+                case 2: mostrarLibros(); break;
+                case 3: mostrarAutores(); break;
+                case 4: mostrarAutoresVivos(); break;
+                case 5: mostrarLibrosPorIdioma(); break;
                 case 0:
                     System.out.println("Cerrando la aplicación. ¡Gracias por usar!");
                     break;
@@ -108,11 +89,13 @@ public class Main {
     }
 
     private void mostrarLibros() {
-
+        List<Libro> libros = repositorioLibro.findAll();
+        libros.forEach(System.out::println);
     }
 
     private void mostrarAutores() {
-
+        List<Autor> autores = repositorioAutor.findAll();
+        autores.forEach(System.out::println);
     }
 
     private void mostrarAutoresVivos() {
@@ -121,5 +104,30 @@ public class Main {
 
     private void mostrarLibrosPorIdioma() {
 
+    }
+
+    private static void mensajeBienvenida() {
+        System.out.println("""
+                 ************ ¡Bienvenido a la aplicación Literalura! ************
+                                \s
+                 A continuación encontrarás la lista de opciones disponibles para
+                 interactuar con los libros y autores de la BD. Simplemente selecciona
+                 el número correspondiente de la acción que desees realizar hasta que
+                 decidas terminar, entonces debes oprimir el número '0'.
+                                \s
+                 ¡Espero disfrutes la experiencia!
+                \s""");
+    }
+
+    private static void menuSeleccion() {
+        System.out.println("""
+                1 - Adicionar libros
+                2 - Mostrar libros en la BD
+                3 - Mostrar autores en la BD
+                4 - Mostrar autores vivos en un determinado año
+                5 - Mostrar libros por idioma
+                \s
+                0 - Salir
+                \s""");
     }
 }
