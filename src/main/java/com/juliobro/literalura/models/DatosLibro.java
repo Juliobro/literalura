@@ -10,7 +10,7 @@ import java.util.List;
 public record DatosLibro(
         @JsonAlias("title") String titulo,
         @JsonAlias("authors") List<DatosAutor> autor,
-        @JsonAlias("languages") List<String> idiomas,
+        @JsonAlias("languages") List<String> idioma,
         @JsonAlias("download_count") int descargas
 ) {
     @Override
@@ -18,7 +18,7 @@ public record DatosLibro(
         return "DatosLibro: {" +
                 "titulo='" + titulo + '\'' +
                 ", autor='" + autor.getFirst() + '\'' +
-                ", idiomas='" + String.join(",", idiomas) +'\''+
+                ", idioma='" + idioma.getFirst() +'\''+
                 ", descargas=" + descargas +
                 '}';
     }

@@ -18,6 +18,14 @@ public class Autor {
     private int fechaNacimiento;
     private int fechaMuerte;
 
+    public Autor() {}
+
+    public Autor(DatosAutor a) {
+        this.nombre = a.nombre();
+        this.fechaNacimiento = a.fechaNacimiento();
+        this.fechaMuerte = a.fechaMuerte();
+    }
+
     /* ---------------------------- Getters & Setters Zone ---------------------------- */
 
 

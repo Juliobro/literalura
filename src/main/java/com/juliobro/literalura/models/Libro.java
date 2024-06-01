@@ -17,6 +17,15 @@ public class Libro {
     private String idioma;
     private int descargas;
 
+    public Libro() {}
+
+    public Libro(DatosLibro l) {
+        this.autor = new Autor(l.autor().getFirst());
+        this.titulo = l.titulo();
+        this.idioma = l.idioma().getFirst();
+        this.descargas = l.descargas();
+    }
+
     /* ---------------------------- Getters & Setters Zone ---------------------------- */
 
 
