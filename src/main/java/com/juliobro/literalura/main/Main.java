@@ -6,9 +6,7 @@ import com.juliobro.literalura.repository.LibroRepository;
 import com.juliobro.literalura.service.ConsumirAPI;
 import com.juliobro.literalura.service.ConversorDatos;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     private Scanner sc = new Scanner(System.in);
@@ -26,23 +24,28 @@ public class Main {
     public void ejecutarMenu() {
         var opcion = -1;
         mensajeBienvenida();
-        
+
         while (opcion != 0) {
             menuSeleccion();
-            opcion = sc.nextInt();
-            sc.nextLine();
+            try {
+                opcion = sc.nextInt();
+                sc.nextLine();
 
-            switch (opcion) {
-                case 1: adicionarLibro(); break;
-                case 2: mostrarLibros(); break;
-                case 3: mostrarAutores(); break;
-                case 4: mostrarAutoresVivos(); break;
-                case 5: mostrarLibrosPorIdioma(); break;
-                case 0:
-                    System.out.println("Cerrando la aplicación. ¡Gracias por usar!");
-                    break;
-                default:
-                    System.out.println("Opción inválida. Por favor, intenta nuevamente.");
+                switch (opcion) {
+                    case 1: adicionarLibro(); break;
+                    case 2: mostrarLibros(); break;
+                    case 3: mostrarAutores(); break;
+                    case 4: mostrarAutoresVivos(); break;
+                    case 5: mostrarLibrosPorIdioma(); break;
+                    case 0:
+                        System.out.println("Cerrando la aplicación. ¡Gracias por usar!");
+                        break;
+                    default:
+                        System.out.println("Opción inválida. Por favor, intenta nuevamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Por favor, ingresa una entrada numérica válida");
+                sc.nextLine();
             }
         }
         sc.close();
@@ -99,11 +102,27 @@ public class Main {
     }
 
     private void mostrarAutoresVivos() {
-
+        System.out.println("Ingresa el año en el que el autor estuvo vivo:");
+        int anio = sc.nextInt(); sc.nextLine();
+        List<Autor> autoresVivos = repositorioAutor.buscarAutoresVivos(anio);
+        autoresVivos.forEach(System.out::println);
     }
 
     private void mostrarLibrosPorIdioma() {
+        List<String> idiomasEnBD = repositorioLibro.listarIdiomasEnBD();
+        Set<String> idiomas = new HashSet<>(idiomasEnBD);
 
+        System.out.println("A continuación están los códigos de idioma que están en la base de datos:");
+        idiomas.forEach(i -> System.out.println("- " + i));
+        System.out.println("Ingresa ahora el código de idioma correspondiente a los libros que deseas ver:");
+        String codigoIdioma = sc.nextLine();
+
+        if (idiomas.contains(codigoIdioma)) {
+            List<Libro> libros = repositorioLibro.listarLibrosSegunIdioma(codigoIdioma);
+            libros.forEach(System.out::println);
+        } else {
+            System.out.println("El código de idioma proporcionaste no se encuentra en la base de datos :(");
+        }
     }
 
     private static void mensajeBienvenida() {
