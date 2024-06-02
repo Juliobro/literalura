@@ -1,10 +1,8 @@
 package com.juliobro.literalura.main;
 
 import com.juliobro.literalura.models.*;
-import com.juliobro.literalura.repository.AutorRepository;
-import com.juliobro.literalura.repository.LibroRepository;
-import com.juliobro.literalura.service.ConsumirAPI;
-import com.juliobro.literalura.service.ConversorDatos;
+import com.juliobro.literalura.repository.*;
+import com.juliobro.literalura.service.*;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import java.util.*;

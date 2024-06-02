@@ -1,8 +1,7 @@
 package com.juliobro.literalura;
 
 import com.juliobro.literalura.main.Main;
-import com.juliobro.literalura.repository.AutorRepository;
-import com.juliobro.literalura.repository.LibroRepository;
+import com.juliobro.literalura.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
