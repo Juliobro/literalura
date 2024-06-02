@@ -42,7 +42,7 @@ public class Main {
                     case 6: mostrarAutoresVivos(); break;
                     case 7: mostrarLibrosPorIdioma(); break;
                     case 8: verEstadisticasLibro(); break;
-//                    case 9: verTop10Libros(); break;
+                    case 9: verTop5Libros(); break;
                     case 0:
                         System.out.println("Cerrando la aplicación. ¡Gracias por usar!");
                         break;
@@ -188,6 +188,20 @@ public class Main {
         }
     }
 
+    private void verTop5Libros() {
+        List<Libro> topLibros = repositorioLibro.findTop5ByOrderByDescargasDesc();
+        if (!topLibros.isEmpty()) {
+            System.out.println("Libros mejor valorados:\n********************************");
+            for (int i = 0; i < topLibros.size(); i++) {
+                System.out.println((i+1) + ". " + topLibros.get(i).getTitulo() +
+                        " - " + topLibros.get(i).getDescargas());
+            }
+            System.out.println("********************************");
+        } else {
+            System.out.println("Aún no hay libros en tu base de datos.");
+        }
+    }
+
     private static void mensajeBienvenida() {
         System.out.println("""
                  ************ ¡Bienvenido a la aplicación Literalura! ************
@@ -211,7 +225,7 @@ public class Main {
                 6 - Mostrar autores vivos en un determinado año
                 7 - Mostrar libros por idioma en la BD
                 8 - Ver estadísticas de determinado libro
-                9 - Mostrar top 10 libros más descargados
+                9 - Mostrar top 5 libros más descargados
                 \s
                 0 - Salir
                 \s""");

@@ -15,4 +15,6 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
 
     @Query("SELECT l FROM Libro l WHERE l.idioma ILIKE :codigoIdioma")
     List<Libro> listarLibrosSegunIdioma(String codigoIdioma);
+
+    List<Libro> findTop5ByOrderByDescargasDesc();
 }
