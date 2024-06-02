@@ -38,3 +38,20 @@ solo debes modificar los parámetros correspondientes en [application.properties
 a tus condiciones de prueba personales y el resto de la aplicación funcionará
 sin problemas. Así que en caso de que la quieras probar, ¡siéntete libre de 
 hacerlo y espero que te guste!
+
+---
+
+## Interfaz del Menú Principal
+![image](https://github.com/Juliobro/literalura/assets/112141655/e9bf730a-d817-4d5c-b0bc-cb7fd0f58a05)
+
+## Mostrando libros en la BD
+![image](https://github.com/Juliobro/literalura/assets/112141655/a61410ca-a311-45e5-950a-7391ba6d9ef8)
+
+## Mostrando autores en la BD
+![image](https://github.com/Juliobro/literalura/assets/112141655/6dacd2b8-15d4-4919-9d6c-bd9dd3046a84)
+
+## Mostrando libros por idioma
+![image](https://github.com/Juliobro/literalura/assets/112141655/a11b764e-142a-42f4-9248-46aa1faa3efe)
+
+## Top 5 libros de tu BD
+![image](https://github.com/Juliobro/literalura/assets/112141655/d9b79ef5-6dff-4239-8b56-59c3d6b7c052)
