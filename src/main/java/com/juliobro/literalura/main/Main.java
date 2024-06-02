@@ -180,7 +180,7 @@ public class Main {
                     "\nNúmero mayor de descargas: " + est.getMax() +
                     "\nNúmero menor de descargas: " + est.getMin() +
                     "\nNúmero total de registros contados: " + est.getCount()
-            );
+            + "\n");
         } else {
             System.out.println("Libro no encontrado :(");
         }
