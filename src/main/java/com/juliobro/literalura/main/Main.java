@@ -5,8 +5,10 @@ import com.juliobro.literalura.repository.AutorRepository;
 import com.juliobro.literalura.repository.LibroRepository;
 import com.juliobro.literalura.service.ConsumirAPI;
 import com.juliobro.literalura.service.ConversorDatos;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     private Scanner sc = new Scanner(System.in);
@@ -35,8 +37,12 @@ public class Main {
                     case 1: adicionarLibro(); break;
                     case 2: mostrarLibros(); break;
                     case 3: mostrarAutores(); break;
-                    case 4: mostrarAutoresVivos(); break;
-                    case 5: mostrarLibrosPorIdioma(); break;
+                    case 4: buscarLibro(); break;
+                    case 5: buscarAutor(); break;
+                    case 6: mostrarAutoresVivos(); break;
+                    case 7: mostrarLibrosPorIdioma(); break;
+                    case 8: verEstadisticasLibro(); break;
+//                    case 9: verTop10Libros(); break;
                     case 0:
                         System.out.println("Cerrando la aplicación. ¡Gracias por usar!");
                         break;
@@ -44,7 +50,7 @@ public class Main {
                         System.out.println("Opción inválida. Por favor, intenta nuevamente.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Por favor, ingresa una entrada numérica válida");
+                System.out.println("Por favor, ingresa una entrada numérica válida.");
                 sc.nextLine();
             }
         }
@@ -53,9 +59,7 @@ public class Main {
 
     private void adicionarLibro() {
         System.out.println("Escribe el nombre del libro que deseas agregar a la BD:");
-        String nombreLibro = sc.nextLine().replace(" ", "%20");
-        String json = consumirAPI.obtenerDatos(URL_BASE + "search=" + nombreLibro);
-        DatosBiblioteca resultadoBusqueda = conversor.convertirDatos(json, DatosBiblioteca.class);
+        DatosBiblioteca resultadoBusqueda = buscarLibroEnAPI();
 
         Optional<DatosLibro> libroBuscado = resultadoBusqueda.libros()
                 .stream()
@@ -65,12 +69,12 @@ public class Main {
             DatosLibro libroEncontrado = libroBuscado.get();
             System.out.println("¡Libro encontrado!\n" + libroEncontrado);
 
-            Optional<Libro> libroEnBD = repositorioLibro.findByTitulo(libroEncontrado.titulo());
+            Optional<Libro> libroEnBD = repositorioLibro.findByTituloContainsIgnoreCase(libroEncontrado.titulo());
             if (libroEnBD.isEmpty()) {
                 DatosAutor autorEncontrado = libroEncontrado.autor().getFirst();
 
                 Autor autor = new Autor(autorEncontrado);
-                Optional<Autor> autorEnBD = repositorioAutor.findByNombre(autor.getNombre());
+                Optional<Autor> autorEnBD = repositorioAutor.findByNombreContainsIgnoreCase(autor.getNombre());
                 if (autorEnBD.isEmpty()) {
                     repositorioAutor.save(autor);
                 } else {
@@ -81,10 +85,10 @@ public class Main {
                 libro.setAutor(autor);
                 repositorioLibro.save(libro);
 
-                System.out.println("El libro se ha adicionado a la base de datos correctamente");
+                System.out.println("El libro se ha adicionado a la base de datos correctamente.");
 
             } else {
-                System.out.println("El libro ya se encuentra en la BD");
+                System.out.println("El libro ya se encuentra en la BD.");
             }
         } else {
             System.out.println("Libro no encontrado :(");
@@ -93,19 +97,59 @@ public class Main {
 
     private void mostrarLibros() {
         List<Libro> libros = repositorioLibro.findAll();
-        libros.forEach(System.out::println);
+        if (!libros.isEmpty()) {
+            libros.forEach(System.out::println);
+        } else {
+            System.out.println("No hay libros en tu BD.");
+        }
     }
 
     private void mostrarAutores() {
         List<Autor> autores = repositorioAutor.findAll();
-        autores.forEach(System.out::println);
+        if (!autores.isEmpty()) {
+            autores.forEach(System.out::println);
+        } else {
+            System.out.println("No hay autores en tu BD.");
+        }
+    }
+
+    private void buscarLibro() {
+        System.out.println("Escribe el titulo del libro que deseas buscar en la BD:");
+        String nombreLibro = sc.nextLine();
+        try {
+            Optional<Libro> libro = repositorioLibro.findByTituloContainsIgnoreCase(nombreLibro);
+            System.out.println(libro.isPresent()
+                    ? "¡Libro encontrado!\n" + libro.get()
+                    : "Libro no encontrado :(");
+
+        } catch (IncorrectResultSizeDataAccessException e) {
+            System.out.println("Por favor, sé más específico con el titulo del libro que deseas buscar");
+        }
+    }
+
+    private void buscarAutor() {
+        System.out.println("Escribe el nombre del autor que deseas buscar en la BD:");
+        String nombreAutor = sc.nextLine();
+        try {
+            Optional<Autor> autor = repositorioAutor.findByNombreContainsIgnoreCase(nombreAutor);
+            System.out.println(autor.isPresent()
+                    ? "¡Autor encontrado!\n" + autor.get()
+                    : "Autor no encontrado :(");
+
+        } catch (IncorrectResultSizeDataAccessException e) {
+            System.out.println("Por favor, sé más específico con el nombre del autor que deseas buscar");
+        }
     }
 
     private void mostrarAutoresVivos() {
         System.out.println("Ingresa el año en el que el autor estuvo vivo:");
         int anio = sc.nextInt(); sc.nextLine();
         List<Autor> autoresVivos = repositorioAutor.buscarAutoresVivos(anio);
-        autoresVivos.forEach(System.out::println);
+        if (!autoresVivos.isEmpty()) {
+            autoresVivos.forEach(System.out::println);
+        } else {
+            System.out.println("No se encontraron autores vivos en el año " + anio);
+        }
     }
 
     private void mostrarLibrosPorIdioma() {
@@ -121,7 +165,26 @@ public class Main {
             List<Libro> libros = repositorioLibro.listarLibrosSegunIdioma(codigoIdioma);
             libros.forEach(System.out::println);
         } else {
-            System.out.println("El código de idioma proporcionaste no se encuentra en la base de datos :(");
+            System.out.println("El código de idioma proporcionaste no se encuentra en la base de datos.");
+        }
+    }
+
+    private void verEstadisticasLibro() {
+        System.out.println("Ingresa el nombre del libro del que deseas ver estadísticas:");
+        DatosBiblioteca resultadoBusqueda = buscarLibroEnAPI();
+        var libroEncontrado = resultadoBusqueda.libros();
+
+        if (!libroEncontrado.isEmpty()) {
+            System.out.println("¡Libro encontrado!\n" + libroEncontrado);
+            IntSummaryStatistics est = libroEncontrado.stream()
+                    .collect(Collectors.summarizingInt(DatosLibro::descargas));
+            System.out.println("Media de descargas: " + est.getAverage() +
+                    "\nNúmero mayor de descargas: " + est.getMax() +
+                    "\nNúmero menor de descargas: " + est.getMin() +
+                    "\nNúmero total de registros contados: " + est.getCount()
+            );
+        } else {
+            System.out.println("Libro no encontrado :(");
         }
     }
 
@@ -143,10 +206,20 @@ public class Main {
                 1 - Adicionar libros
                 2 - Mostrar libros en la BD
                 3 - Mostrar autores en la BD
-                4 - Mostrar autores vivos en un determinado año
-                5 - Mostrar libros por idioma
+                4 - Buscar libro por nombre en la BD
+                5 - Buscar autor por nombre en la BD
+                6 - Mostrar autores vivos en un determinado año
+                7 - Mostrar libros por idioma en la BD
+                8 - Ver estadísticas de determinado libro
+                9 - Mostrar top 10 libros más descargados
                 \s
                 0 - Salir
                 \s""");
+    }
+
+    private DatosBiblioteca buscarLibroEnAPI() {
+        String nombreLibro = sc.nextLine().replace(" ", "%20");
+        String json = consumirAPI.obtenerDatos(URL_BASE + "search=" + nombreLibro);
+        return conversor.convertirDatos(json, DatosBiblioteca.class);
     }
 }

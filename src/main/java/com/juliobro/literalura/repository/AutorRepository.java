@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.List;
 
 public interface AutorRepository extends JpaRepository<Autor, Long> {
-    Optional<Autor> findByNombre(String nombre);
+    Optional<Autor> findByNombreContainsIgnoreCase(String nombre);
 
     @Query("SELECT a FROM Autor a WHERE a.fechaNacimiento <= :anio AND a.fechaMuerte >= :anio")
     List<Autor> buscarAutoresVivos(int anio);

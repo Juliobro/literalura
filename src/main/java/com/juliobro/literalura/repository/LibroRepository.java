@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LibroRepository extends JpaRepository<Libro, Long> {
-    Optional<Libro> findByTitulo(String titulo);
+    Optional<Libro> findByTituloContainsIgnoreCase(String titulo);
 
     @Query("SELECT l.idioma FROM Libro l")
     List<String> listarIdiomasEnBD();
